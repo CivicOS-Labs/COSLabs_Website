@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Open Source Student — CivicOS Labs</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #0a1628;
+            --blue: #1a3a5c;
+            --accent: #00b4d8;
+            --accent2: #0077b6;
+            --white: #f8f9fa;
+            --gray: #adb5bd;
+            --dark-gray: #6c757d;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            line-height: 1.6;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 180, 216, 0.1);
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--white);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        nav a:hover { color: var(--accent); }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            background: radial-gradient(ellipse at 50% 30%, rgba(0, 180, 216, 0.08) 0%, transparent 60%);
+        }
+        .hero-badge {
+            display: inline-block;
+            background: rgba(0, 180, 216, 0.15);
+            color: var(--accent);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 750px;
+        }
+        .hero h1 em {
+            color: var(--accent);
+            font-style: normal;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: var(--navy);
+        }
+        .btn-primary:hover {
+            background: #00cfee;
+            transform: translateY(-1px);
+        }
+        .btn-outline {
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+        .btn-outline:hover {
+            background: rgba(0, 180, 216, 0.1);
+        }
+        .price-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--navy);
+            font-size: 1.8rem;
+            font-weight: 800;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        .price-note {
+            color: var(--dark-gray);
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .section h2 em { color: var(--accent); font-style: normal; }
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 3rem;
+            font-size: 1.05rem;
+        }
+
+        .bundle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .bundle-card {
+            background: rgba(26, 58, 92, 0.3);
+            border: 1px solid rgba(0, 180, 216, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        .bundle-num {
+            background: var(--accent);
+            color: var(--navy);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .bundle-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .bundle-card .price {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .bundle-card p {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+        .bundle-total {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(0, 180, 216, 0.05);
+            border: 1px solid rgba(0, 180, 216, 0.2);
+            border-radius: 12px;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        .bundle-total .old {
+            text-decoration: line-through;
+            color: var(--dark-gray);
+            font-size: 1.1rem;
+        }
+        .bundle-total .new {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .toc-card {
+            background: rgba(26, 58, 92, 0.2);
+            border: 1px solid rgba(0, 180, 216, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        .toc-card .toc-num {
+            color: var(--accent);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .toc-card h4 { margin: 0.3rem 0; }
+        .toc-card p {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+        .toc-card .pages {
+            color: var(--dark-gray);
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .platforms {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .platform {
+            background: rgba(26, 58, 92, 0.3);
+            border: 1px solid rgba(0, 180, 216, 0.15);
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            min-width: 180px;
+        }
+        .platform h4 { margin-bottom: 0.3rem; }
+        .platform .status { color: var(--accent); font-size: 0.85rem; }
+        .platform .coming { color: var(--dark-gray); font-size: 0.85rem; }
+
+        .faq-item {
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            background: rgba(26, 58, 92, 0.2);
+            border: 1px solid rgba(0, 180, 216, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .faq-q {
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-q:hover { color: var(--accent); }
+        .faq-a {
+            padding: 0 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, padding 0.3s;
+        }
+        .faq-item.open .faq-a {
+            max-height: 300px;
+            padding: 0 1.5rem 1.2rem;
+        }
+        .faq-item.open .faq-q .arrow { transform: rotate(180deg); }
+        .arrow { transition: transform 0.3s; color: var(--accent); }
+
+        .mission-banner {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(0, 180, 216, 0.05);
+            border-top: 1px solid rgba(0, 180, 216, 0.1);
+            border-bottom: 1px solid rgba(0, 180, 216, 0.1);
+        }
+        .mission-banner p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .mission-banner strong { color: var(--accent); }
+
+        footer {
+            border-top: 1px solid rgba(0, 180, 216, 0.1);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        footer p { color: var(--dark-gray); font-size: 0.85rem; }
+        footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        footer a { color: var(--gray); text-decoration: none; font-size: 0.9rem; }
+        footer a:hover { color: var(--accent); }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .bundle-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="https://civicoslabs.com" class="logo">Civic<span>OS</span> Labs</a>
+    <ul>
+        <li><a href="#bundle">What's Included</a></li>
+        <li><a href="#contents">Contents</a></li>
+        <li><a href="#platforms-section">Get It</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://civicoslabs.com">CivicOS Labs</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <div class="hero-badge">THE OPEN SOURCE STUDENT SERIES</div>
+    <h1>Stop renting AI.<br><em>Start building it.</em></h1>
+    <p>216 pages. Six books. One price. Install and run AI on your own computer, then build tools you control completely. No subscriptions. No data sharing. Just skills that compound.</p>
+    <div class="price-tag">$9.99</div>
+    <div class="price-note">Founders Complete Edition — Introductory Pricing</div>
+    <div class="cta-group">
+        <a href="https://www.amazon.com/dp/B0F96TVW5Q" class="btn btn-primary" target="_blank">Get It on Kindle</a>
+        <a href="#bundle" class="btn btn-outline">See What's Inside</a>
+    </div>
+</section>
+
+<div class="mission-banner">
+    <p><strong>100% of proceeds fund CivicOS Labs, LLC</strong> — building open-source government transparency tools. Every purchase directly funds the mission.</p>
+</div>
+
+<section class="section" id="bundle">
+    <h2>Six books. <em>One price.</em></h2>
+    <p class="section-subtitle">Everything you need to go from AI consumer to AI builder.</p>
+    <div class="bundle-grid">
+        <div class="bundle-card">
+            <div class="bundle-num">1</div>
+            <div>
+                <h4>The Emergency Fix Card</h4>
+                <div class="price">$4.99</div>
+                <p>Quick-reference troubleshooting for when something breaks. Keep it next to your keyboard.</p>
+            </div>
+        </div>
+        <div class="bundle-card">
+            <div class="bundle-num">2</div>
+            <div>
+                <h4>The Hardware Guide</h4>
+                <div class="price">$5.99</div>
+                <p>What RAM actually means for AI models. What you need, what you don't, and how to get started on any budget.</p>
+            </div>
+        </div>
+        <div class="bundle-card">
+            <div class="bundle-num">3</div>
+            <div>
+                <h4>The Open Source Student</h4>
+                <div class="price">$9.99</div>
+                <p>The core guide. What AI is, how it works, why open source matters, and the builder mindset.</p>
+            </div>
+        </div>
+        <div class="bundle-card">
+            <div class="bundle-num">4</div>
+            <div>
+                <h4>Operational Guide</h4>
+                <div class="price">$5.99</div>
+                <p>Running models day-to-day. Updates, configurations, model management, and keeping things smooth.</p>
+            </div>
+        </div>
+        <div class="bundle-card">
+            <div class="bundle-num">5</div>
+            <div>
+                <h4>Student Setup Checklist</h4>
+                <div class="price">$4.99</div>
+                <p>Step-by-step checklist from unboxing to first AI conversation. No steps skipped.</p>
+            </div>
+        </div>
+        <div class="bundle-card">
+            <div class="bundle-num">6</div>
+            <div>
+                <h4>The Terminal Survival Guide</h4>
+                <div class="price">$9.99</div>
+                <p>Command-line basics that build real technical fluency. The skill that separates builders from consumers.</p>
+            </div>
+        </div>
+    </div>
+    <div class="bundle-total">
+        <div class="old">Individual total: $41.94</div>
+        <div class="new">$9.99</div>
+        <div style="color: var(--gray); font-size: 0.9rem;">Founders Complete Edition — All six books</div>
+    </div>
+</section>
+
+<section class="section" id="contents">
+    <h2>What's <em>Inside</em></h2>
+    <p class="section-subtitle">17 chapters across five parts. From zero to AI builder.</p>
+    <div class="toc-grid">
+        <div class="toc-card">
+            <div class="toc-num">Part 01 — Foundation</div>
+            <h4>Understanding AI & Open Source</h4>
+            <p>What AI actually is — models, training, inference, tokens — without the hype. Why open source matters. The builder mindset.</p>
+            <div class="pages">~36 pages · Chapters 1–3</div>
+        </div>
+        <div class="toc-card">
+            <div class="toc-num">Part 02 — Setup</div>
+            <h4>Hardware & Installation</h4>
+            <p>Hardware requirements demystified. Installing Ollama on Mac, Windows, or Linux. Your first model download.</p>
+            <div class="pages">~28 pages · Chapters 4–5</div>
+        </div>
+        <div class="toc-card">
+            <div class="toc-num">Part 03 — Core Skills</div>
+            <h4>Running & Prompting AI</h4>
+            <p>Starting your first AI model. The three elements of good prompts. Multi-turn conversations. Troubleshooting.</p>
+            <div class="pages">~32 pages · Chapter 6</div>
+        </div>
+        <div class="toc-card">
+            <div class="toc-num">Part 04 — Building Tools</div>
+            <h4>Four Practical Assistants</h4>
+            <p>Homework Assistant (Socratic method). Research Assistant (synthesis). Writing Assistant (outlining). Personal Tutor (adaptive learning).</p>
+            <div class="pages">~64 pages · Chapters 7–10</div>
+        </div>
+        <div class="toc-card">
+            <div class="toc-num">Part 05 — Agents & Mastery</div>
+            <h4>AI Agents & Responsible Use</h4>
+            <p>Creating your first agent library. Academic integrity framework. Privacy, ethics, and the long-term advantage of independence.</p>
+            <div class="pages">~56 pages · Chapters 11–17</div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="platforms-section">
+    <h2>Get It <em>Now</em></h2>
+    <p class="section-subtitle">$9.99 · Founders Complete Edition · 216 pages</p>
+    <div class="platforms">
+        <a href="https://www.amazon.com/dp/B0F96TVW5Q" target="_blank" class="platform" style="text-decoration:none; color: inherit;">
+            <h4>📘 Amazon Kindle</h4>
+            <div class="status">Available Now</div>
+        </a>
+        <div class="platform">
+            <h4>🛍 Lemon Squeezy</h4>
+            <div class="coming">Coming Soon</div>
+        </div>
+        <div class="platform">
+            <h4>📚 Apple Books</h4>
+            <div class="coming">Coming Soon</div>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="faq">
+    <h2>Frequently <em>Asked</em></h2>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What formats is the book available in? <span class="arrow">▼</span></div>
+        <div class="faq-a">The Open Source Student: Founders Complete Edition is now live on Amazon Kindle, with Lemon Squeezy, Apple Books, and additional platforms to follow. The Founders Complete Edition is currently $9.99 — extended Founders Edition pricing.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Who is this book written for? <span class="arrow">▼</span></div>
+        <div class="faq-a">The Founders Complete Edition is written for civic technology founders, government IT leaders, nonprofit executives, and graduate students in public policy, computer science, or public administration. It assumes comfort with technical concepts but is accessible without a software engineering background.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Is this the same as the free AI Learning Kit? <span class="arrow">▼</span></div>
+        <div class="faq-a">No. The free AI Learning Kit contains introductory materials. The Founders Complete Edition is a full 216-page practical guide that teaches you to install and run AI locally, then build homework assistants, research tools, writing coaches, and personal tutors. The Learning Kit is a starting point; the book is for those ready to become AI builders.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Does the book include access to code or repositories? <span class="arrow">▼</span></div>
+        <div class="faq-a">Yes. All purchasers receive access to a companion GitHub repository containing reference implementations, code examples from the book, specification documents, and supplementary materials. The repository is Apache 2.0 licensed and publicly accessible.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Is there institutional or bulk pricing? <span class="arrow">▼</span></div>
+        <div class="faq-a">Institutional pricing will be available after launch. Contact ncerbone.ca@gmail.com for academic and organizational inquiries.</div>
+    </div>
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Where does the money go? <span class="arrow">▼</span></div>
+        <div class="faq-a">100% of proceeds fund CivicOS Labs, LLC — building open-source government transparency tools. Revenue from the ebook directly funds the Mirror, the Ledger, and CivicOS operational infrastructure.</div>
+    </div>
+</section>
+
+<div class="mission-banner">
+    <p><strong>Every purchase funds civic transparency.</strong> CivicOS Labs builds open tools that make local government spending, contracts, and operations visible to the people who pay for them.</p>
+</div>
+
+<footer>
+    <div class="footer-links">
+        <a href="https://civicoslabs.com">CivicOS Labs</a>
+        <a href="https://github.com/CivicOS-Labs" target="_blank">GitHub</a>
+        <a href="https://civicos-institute.org">CivicOS Institute</a>
+        <a href="mailto:ncerbone.ca@gmail.com">Contact</a>
+    </div>
+    <p>&copy; 2026 CivicOS Labs, LLC. All rights reserved. West Palm Beach, Florida.</p>
+</footer>
+
+</body>
+</html>

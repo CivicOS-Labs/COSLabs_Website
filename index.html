@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicOS Labs — Civic Technology for Transparent Government</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy: #0a1628;
+            --blue: #1a3a5c;
+            --accent: #00b4d8;
+            --accent2: #0077b6;
+            --white: #f8f9fa;
+            --gray: #adb5bd;
+            --dark-gray: #6c757d;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--navy);
+            color: var(--white);
+            line-height: 1.6;
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 180, 216, 0.1);
+        }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--white);
+            text-decoration: none;
+        }
+        .logo span { color: var(--accent); }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        nav a:hover { color: var(--accent); }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            background: radial-gradient(ellipse at 50% 30%, rgba(0, 180, 216, 0.08) 0%, transparent 60%);
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+        }
+        .cta-group { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            padding: 0.9rem 2rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-primary { background: var(--accent); color: var(--navy); }
+        .btn-primary:hover { background: #00cfee; transform: translateY(-1px); }
+        .btn-outline { border: 1px solid var(--accent); color: var(--accent); background: transparent; }
+        .btn-outline:hover { background: rgba(0, 180, 216, 0.1); }
+
+        .section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+        .section h2 { font-size: 2.2rem; margin-bottom: 1rem; text-align: center; }
+        .section h2 span { color: var(--accent); }
+        .section-subtitle { text-align: center; color: var(--gray); margin-bottom: 3rem; font-size: 1.1rem; }
+
+        .ebook-banner {
+            padding: 4rem 2rem;
+            background: rgba(0, 180, 216, 0.05);
+            border-top: 1px solid rgba(0, 180, 216, 0.1);
+            border-bottom: 1px solid rgba(0, 180, 216, 0.1);
+        }
+        .ebook-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .ebook-text h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .ebook-text h3 span { color: var(--accent); }
+        .ebook-text .tagline { color: var(--accent); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 1rem; }
+        .ebook-text p { color: var(--gray); margin-bottom: 1.5rem; font-size: 0.95rem; }
+        .ebook-text .price { color: var(--accent); font-size: 1.4rem; font-weight: 800; }
+        .ebook-text .price-note { color: var(--dark-gray); font-size: 0.8rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card {
+            background: rgba(26, 58, 92, 0.3);
+            border: 1px solid rgba(0, 180, 216, 0.15);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .card h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+        .card p { color: var(--gray); font-size: 0.95rem; }
+        .card .tag {
+            display: inline-block;
+            background: rgba(0, 180, 216, 0.15);
+            color: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        .about-text h3 { font-size: 1.4rem; margin-bottom: 1rem; }
+        .about-text p { color: var(--gray); margin-bottom: 1rem; }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .stat h3 { font-size: 2.5rem; color: var(--accent); font-weight: 800; }
+        .stat p { color: var(--gray); font-size: 0.9rem; }
+
+        footer {
+            border-top: 1px solid rgba(0, 180, 216, 0.1);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        footer p { color: var(--dark-gray); font-size: 0.85rem; }
+        footer .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; }
+        footer a { color: var(--gray); text-decoration: none; font-size: 0.9rem; }
+        footer a:hover { color: var(--accent); }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .about-grid { grid-template-columns: 1fr; }
+            .ebook-inner { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="https://civicoslabs.com" class="logo">Civic<span>OS</span> Labs</a>
+    <ul>
+        <li><a href="#ebook-section">The Open Source Student</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>Civic technology for <span>transparent government</span></h1>
+    <p>We build open tools that make local government spending, contracts, and operations visible to the people who pay for them.</p>
+    <div class="cta-group">
+        <a href="/ebook/" class="btn btn-primary">Get the Book — $9.99</a>
+        <a href="#products" class="btn btn-outline">See What We Build</a>
+    </div>
+</section>
+
+<section class="ebook-banner" id="ebook-section">
+    <div class="ebook-inner">
+        <div class="ebook-text">
+            <div class="tagline">THE OPEN SOURCE STUDENT SERIES</div>
+            <h3>The Open Source <span>Student</span></h3>
+            <p>216 pages. Six books. Install and run AI on your own computer, then build tools you control completely. No subscriptions. No data sharing. Just skills that compound.</p>
+            <div class="price">$9.99</div>
+            <div class="price-note">Founders Complete Edition · Intro Pricing</div>
+            <br>
+            <a href="/ebook/" class="btn btn-primary">Learn More</a>
+        </div>
+        <div>
+            <a href="/ebook/">
+                <img src="https://civicos-institute.org/ebook/" alt="The Open Source Student — Founders Complete Edition" style="width:100%; border-radius: 12px; border: 1px solid rgba(0,180,216,0.15);">
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="products">
+    <h2>What We <span>Build</span></h2>
+    <p class="section-subtitle">Open tools for civic transparency, from data to deployment.</p>
+    <div class="grid">
+        <div class="card">
+            <div class="tag">Core Product</div>
+            <h3>The Mirror</h3>
+            <p>Live contract search for local government. FOIA-sourced, searchable, plain-language. See what your city is buying, who's selling it, and what it costs.</p>
+        </div>
+        <div class="card">
+            <div class="tag">Research</div>
+            <h3>The Ledger</h3>
+            <p>Verified maps of municipal software ecosystems. Which platforms your city runs, what they cost, and whether they serve the public or the vendor.</p>
+        </div>
+        <div class="card">
+            <div class="tag">Services</div>
+            <h3>Civic Deployments</h3>
+            <p>Technology consulting and deployment services for local governments and civic organizations. Open-source first, vendor-neutral.</p>
+        </div>
+        <div class="card">
+            <div class="tag">Services</div>
+            <h3>Transparency Audits</h3>
+            <p>Independent assessments of government technology procurement. We review contracts, platforms, and vendor lock-in — and publish what we find.</p>
+        </div>
+        <div class="card">
+            <div class="tag">Data</div>
+            <h3>CivicOS Data API</h3>
+            <p>Programmatic access to municipal contract data, vendor relationships, and spending records. For journalists, researchers, and civic technologists.</p>
+        </div>
+        <div class="card">
+            <div class="tag">Education</div>
+            <h3>Workshops & Zines</h3>
+            <p>Practical civic technology training for community organizations, journalists, and engaged citizens. FOIA how-tos, data literacy, government tech 101.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="about">
+    <h2>About <span>CivicOS Labs</span></h2>
+    <p class="section-subtitle">A Florida LLC building civic infrastructure from the ground up.</p>
+    <div class="about-grid">
+        <div class="about-text">
+            <h3>Who We Are</h3>
+            <p>CivicOS Labs, LLC is a civic technology company based in West Palm Beach, Florida. We build open tools that make local government transparent, accountable, and accessible.</p>
+            <p>Founded in 2026 with a clear mission: every citizen should be able to understand what their government is buying, who's selling it, and whether it works.</p>
+        </div>
+        <div class="about-text">
+            <h3>How We Operate</h3>
+            <p>We earn revenue through deployments, audits, and data services — not by selling citizen data or locking governments into proprietary platforms.</p>
+            <p>CivicOS Labs is structured to support a companion 501(c)(3) nonprofit for grant-funded research and educational programs. Mission and market, aligned.</p>
+        </div>
+    </div>
+</section>
+
+<div class="stat-grid">
+    <div class="stat">
+        <h3>FOIA</h3>
+        <p>First-class method</p>
+    </div>
+    <div class="stat">
+        <h3>0</h3>
+        <p>Proprietary platforms</p>
+    </div>
+    <div class="stat">
+        <h3>216</h3>
+        <p>Pages in the book</p>
+    </div>
+    <div class="stat">
+        <h3>100%</h3>
+        <p>Open by default</p>
+    </div>
+</div>
+
+<section class="section" id="contact">
+    <h2>Get In <span>Touch</span></h2>
+    <p class="section-subtitle">We work with municipalities, journalists, civic organizations, and engaged citizens.</p>
+    <div style="max-width: 500px; margin: 0 auto; text-align: center;">
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3>Let's Talk</h3>
+            <p>Whether you're a city looking for a transparency audit, a journalist researching municipal tech, or an organization that wants to deploy civic tools — we're here.</p>
+        </div>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="mailto:ncerbone.ca@gmail.com" class="btn btn-primary">Email Us</a>
+            <a href="https://github.com/CivicOS-Labs" class="btn btn-outline" target="_blank">GitHub</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-links">
+        <a href="https://civicoslabs.com">Home</a>
+        <a href="/ebook/">The Open Source Student</a>
+        <a href="https://github.com/CivicOS-Labs" target="_blank">GitHub</a>
+        <a href="https://civicos-institute.org">CivicOS Institute</a>
+        <a href="mailto:ncerbone.ca@gmail.com">Contact</a>
+    </div>
+    <p>&copy; 2026 CivicOS Labs, LLC. All rights reserved. West Palm Beach, Florida.</p>
+</footer>
+
+</body>
+</html>
